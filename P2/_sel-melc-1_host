@@ -1,0 +1,5 @@
+FROM alpine:latest
+
+RUN ip link set eth0 down && ip link set eth0 name eth1 && ip link set eth1 up 
+
+CMD ["/bin/sh"]

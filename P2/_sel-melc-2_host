@@ -1,0 +1,46 @@
+FROM frrouting/frr:latest
+
+RUN apk update && apk add --no-cache busybox-static
+
+# This configuration was taken from the official documentation : https://docs.frrouting.org/en/latest/setup.html#daemons-configuration-file 
+# And adapted to have BGPD, zebra, OSPFD, IS-ISD.
+# The first section describes which daemons to run and the secon which options those daemons should be ran with
+RUN echo "zebra=yes" > /etc/frr/daemons && \
+    echo "bgpd=yes" >> /etc/frr/daemons && \
+    echo "ospfd=yes" >> /etc/frr/daemons && \
+    echo "ospf6d=no" >> /etc/frr/daemons && \
+    echo "ripd=no" >> /etc/frr/daemons && \
+    echo "ripngd=no" >> /etc/frr/daemons && \
+    echo "isisd=yes" >> /etc/frr/daemons && \
+    echo "pimd=no" >> /etc/frr/daemons && \
+    echo "ldpd=no" >> /etc/frr/daemons && \
+    echo "nhrpd=no" >> /etc/frr/daemons && \
+    echo "eigrpd=no" >> /etc/frr/daemons && \
+    echo "babeld=no" >> /etc/frr/daemons && \
+    echo "sharpd=no" >> /etc/frr/daemons && \
+    echo "staticd=no" >> /etc/frr/daemons && \
+    echo "pbrd=no" >> /etc/frr/daemons && \
+    echo "bfdd=no" >> /etc/frr/daemons && \
+    echo "fabricd=no" >> /etc/frr/daemons && \
+    echo "vtysh_enable=yes" >> /etc/frr/daemons && \
+    echo "zebra_options=' -s 90000000 -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "bgpd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "ospfd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "ospf6d_options=' -d -F traditional -A ::1'" >> /etc/frr/daemons && \
+    echo "ripd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "ripngd_options=' -d -F traditional -A ::1'" >> /etc/frr/daemons && \
+    echo "isisd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "pimd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "ldpd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "nhrpd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "eigrpd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "babeld_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "sharpd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "staticd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "pbrd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "bfdd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons && \
+    echo "fabricd_options=' -d -F traditional -A 127.0.0.1'" >> /etc/frr/daemons
+
+
+# Make sure watchfrr is started as a daemon then that we have an interactive shell
+RUN sed -i 's|/usr/lib/frr/watchfrr $(daemon_list)|/usr/lib/frr/watchfrr -d $(daemon_list);/bin/sh|' /usr/lib/frr/docker-start
