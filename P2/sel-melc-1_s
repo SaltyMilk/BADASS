@@ -1,8 +1,5 @@
 # Setup for routeur_sel-melc-1 (static multicast)
 
-# IP SETUP
-ip addr add 10.1.1.1/24 dev eth0
-ip addr add 30.1.1.3/24 dev eth1
 
 # Adding a vxlan with an id 10, going through eth0 (connection to switch), the ip here is the ip of the eth0 from the other router we will connect to
 ip link add vxlan10 type vxlan id 10 remote 10.1.1.2 dstport 4789 dev eth0
