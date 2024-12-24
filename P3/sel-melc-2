@@ -10,22 +10,35 @@ brctl addif br0 eth1
 vtysh
 config t
 
+# We only want to work on ipv4
 no ipv6 forwarding
 
-
+# Configure the eth0 interface
 interface eth0
+ip address 10.1.1.2/30
 ip ospf area 0
+exit
 
+# Configure the lo interface
 interface lo
+ip address 1.1.1.2/32
 ip ospf area 0
+exit
 
+# Set the AS number for BGP to 1
 router bgp 1
 neighbor 1.1.1.1 remote-as 1
+# Use the lo interface for communication on the neighbor
 neighbor 1.1.1.1 update-source lo
 
+# Configure evpn
 address-family l2vpn evpn
+# Activate the bgp neighbor
 neighbor 1.1.1.1 activate
+# Advertise all vni, we only have our vni 10 from the vxlan setup
 advertise-all-vni
 exit-address-family
+exit
 
 router ospf
+exit
