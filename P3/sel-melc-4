@@ -27,7 +27,7 @@ exit
 
 # Set the AS number for BGP to 1
 router bgp 1
-neighbor 1.1.1.1 remote-as 
+neighbor 1.1.1.1 remote-as 1
 # Use the lo interface for communication on the neighbor
 neighbor 1.1.1.1 update-source lo
 
